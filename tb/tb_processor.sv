@@ -35,10 +35,8 @@ module processor_tb;
   // Load memory, pulse reset, then let it run
   initial begin
 
-    // Wait a little, then preload memory inside DUT.
-    // IMPORTANT: your file must be formatted for the byte-array mainMemory
-    // (one byte per entry or whitespace-separated byte hex values),
-    // because dut.mainMemory is a byte array in your design.
+    // Preload memory inside DUT.
+    // IMPORTANT: your file must be the output from /programs/convert.py
     #1;
     $display("[%0t] Loading memory from %s ...", $time, MEM_FILE);
     $readmemh(MEM_FILE, dut.mainMemory);
@@ -48,29 +46,11 @@ module processor_tb;
         dut.registers[i] = 32'b0;
     // --------------------------------
 
-    // Keep reset asserted for two clock edges (adjust if needed)
+    // Keep reset asserted for two clock edges
     reset = 1;
     repeat (2) @(posedge clock);
     reset = 0;
     $display("[%0t] Released reset, processor running.", $time);
-  end
-
-  // Optional: run for a fixed number of cycles and display gp/a7/a0 periodically
-  integer cycles = 0;
-  initial begin
-    cycles = 0;
-    while (cycles < TIMEOUT_CYCLES) begin
-      @(posedge clock);
-      cycles = cycles + 1;
-
-      if ((cycles % 500) == 0) begin
-        $display("[%0t] cycle=%0d gp=%08h a7=%08h a0=%08h", $time, cycles, gp, a7, a0);
-      end
-    end
-
-    $display("[%0t] TIMEOUT after %0d cycles. Final gp=%08h a7=%08h a0=%08h",
-             $time, cycles, gp, a7, a0);
-    $finish;
   end
 
 endmodule
