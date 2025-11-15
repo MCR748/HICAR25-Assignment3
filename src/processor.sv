@@ -1,7 +1,7 @@
 //`default_nettype none
 
 module processor #(
-    WIDTH = 32, NUM_REGS=32, DATA_WIDTH = 8, MEM_DEPTH=16384
+    WIDTH = 32, NUM_REGS=32, DATA_WIDTH = 8, MEM_DEPTH=2048
   ) (
     input logic clock, reset, memEn,
     input logic [WIDTH-1: 0] memData, 
